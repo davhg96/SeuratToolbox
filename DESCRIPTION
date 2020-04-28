@@ -2,10 +2,10 @@ Package: SeuratToolbox
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: David Hidalgo Gil
+Maintainer: The package maintainer <da4206hi-s@student.lu.se>
+Description: This package contains functions to analyce single cell sequencing 
+             using the seurat package.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
