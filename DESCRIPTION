@@ -1,11 +1,15 @@
 Package: SeuratToolbox
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Seurat toolbox for scRNA analysis   
 Version: 0.1.0
-Author: David Hidalgo Gil
+Author: as.person(c("David Hidalgo Gil <da4206hi-s@student.lu.se> [aut,cre]")) 
 Maintainer: The package maintainer <da4206hi-s@student.lu.se>
 Description: This package contains functions to analyce single cell sequencing 
              using the seurat package.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+  tidyverse (>+1.3.0)
+  Seurat (>=3.1.4)
+  patchwork (>=1.0.0)
