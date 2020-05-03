@@ -9,9 +9,9 @@
 #
 # Some useful keyboard shortcuts for package authoring:
 #
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#   Install Package:           'Ctrl , Shift , B'
+#   Check Package:             'Ctrl , Shift , E'
+#   Test Package:              'Ctrl , Shift , T'
 
 hello <- function() {
   print("Hello, world!")
@@ -37,13 +37,13 @@ OpenData <- function(dir="data/",
 
   plot1 <- FeatureScatter(data.object, feature1 = "nCount_RNA", feature2 = "percent.mt")
   plot2 <- FeatureScatter(data.object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-  plot3 <- plot1 + plot2
+  plot3 <- plot1 , plot2
 
-  png(filename = outdir+"FeatViolinPlot.png")
+  png(paste0(filename = outdir,"FeatViolinPlot.png"))
   Vplot
   dev.off()
 
-  png(filename = outdir+"FeatScatterPlot.png")
+  png(paste0(filename = outdir,"FeatScatterPlot.png"))
   plot3
   dev.off()
 
@@ -76,7 +76,7 @@ NormalizeAndScale <- function(data.object,
   plot1 <- VariableFeaturePlot(data.object)
   plot2 <- LabelPoints(plot = plot1, points = top20, repel = TRUE)
 
-  png(filename = outdir + "VarFeatPlot.png")
+  png(paste0(filename = outdir , "VarFeatPlot.png"))
   plot2
   dev.off()
 
@@ -85,5 +85,96 @@ NormalizeAndScale <- function(data.object,
 
   return(data.object)
 }
+
+
+
+LinearAnalysis <- function (data.object,
+                           dims=20,
+                           cells=1000,
+                           balance=TRUE,
+                           JackStrawReplicates=100,
+                           outdir="output/"){
+
+
+  data.object <- RunPCA(data.object, features = VariableFeatures(object = data.object))
+  data.object <- JackStraw(data.object,num.replicate = JackStrawReplicates)
+  data.object <- ScoreJackStraw(data.object, dims = 1:dims)
+
+  heatm <- DimHeatmap(data.object, dims = 1:dims, cells = 1000, balanced = TRUE)
+  vizdimplot <- VizDimLoadings(data.object, dims = 1:4, reduction = "pca")
+  dimplot <- DimPlot(data.object, reduction = "pca")
+  JSPlot <- JackStrawPlot(data.object, dims = 1:dims)
+  elbow <- ElbowPlot(data.object)
+
+  png(paste0(outdir,"VizdimPlot4dimsPCA.png"))
+  vizdimplot
+  dev.off()
+
+  png(paste0(outdir,"DimplotPCA.png"))
+  dimplot
+  dev.off()
+
+  png(paste0(outdir,"JackStrawPlot",dims,"dims.png"))
+  JSPlot
+  dev.off()
+
+  png(paste0(outdir,"ElbowPlotPCApng"))
+  elbow
+  dev.off()
+
+  heatm
+  par(ask=TRUE)
+  vizdimplot
+  dimplot
+  JSPlot
+  elbow
+  par(ask=FALSE)
+
+  return(data.object)
+}
+
+
+Cluser <-  function (data.object,
+                     dims=5,
+                     UMAPres=0.1,
+                     tSNEREs=0.1,
+                     outdir="output/"){
+
+  data.object <- FindNeighbors(data.object,dims = 1:dims)
+
+  if(UMAPres==tSNEREs){
+    data.object <- FindClusters(data.object, resolution = UMAPres)
+
+    data.object <- RunUMAP(data.object, dims = 1:dims)
+    UMAPplot <- DimPlot(data.object, reduction = "umap")
+
+    data.object <- RunTSNE(data.object, dims = 1:dims)
+    tSNEPlot <- DimPlot(day16, reduction = "tsne")
+  }
+  else{
+    data.object <- FindClusters(data.object, resolution = UMAPres)
+    data.object <- RunUMAP(data.object, dims = 1:dims)
+    UMAPplot <- DimPlot(data.object, reduction = "umap")
+
+    data.object <- FindClusters(data.object, resolution = tSNEREs)
+    data.object <- RunTSNE(data.object, dims = 1:dims)
+    tSNEPlot <- DimPlot(day16, reduction = "tsne")
+
+  }
+
+  png(paste0(outdir,"UMAPPlot_",str(dims),"dims_",str(UMAPres),"Res"))
+  UMAPplot
+  dev.off()
+
+  png(paste0(outdir,"tSNEplot_",str(dims),"dims_",str(tSNEREs),"Res"))
+  UMAPplot
+  dev.off()
+
+return(data.object)
+
+}
+
+
+
 
 
