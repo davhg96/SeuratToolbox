@@ -31,25 +31,25 @@ OpenData <- function(dir="data/",
                                   project=project.name,
                                   min.cells=min.cels,
                                   min.features=min.feat)
-  data.object[["percent.mt"]]<-PercentageFeatureSet(day16, pattern = "^MT-")
+  data.object[["percent.mt"]]<-PercentageFeatureSet(data.object, pattern = "^MT-")
 
-  Vplot<-VlnPlot(day16, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol=3)
+  Vplot<-VlnPlot(data.object, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol=3)
 
   plot1 <- FeatureScatter(data.object, feature1 = "nCount_RNA", feature2 = "percent.mt")
   plot2 <- FeatureScatter(data.object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-  plot3 <- plot1 , plot2
+  plot3 <- plot1 + plot2
 
-  png(paste0(filename = outdir,"FeatViolinPlot.png"))
-  Vplot
+  png(filename=paste0(outdir,"FeatViolinPlot.png"))
+  print(Vplot)
   dev.off()
 
-  png(paste0(filename = outdir,"FeatScatterPlot.png"))
-  plot3
+  png(filename=paste0(outdir,"FeatScatterPlot.png"))
+  print(plot3)
   dev.off()
 
   par(mfrow=c(2,1))
-  Vplot
-  plot3
+  print(Vplot)
+  print(plot3)
   par(mfrow=c(1,1))
 
   return(data.object)
@@ -76,11 +76,11 @@ NormalizeAndScale <- function(data.object,
   plot1 <- VariableFeaturePlot(data.object)
   plot2 <- LabelPoints(plot = plot1, points = top20, repel = TRUE)
 
-  png(paste0(filename = outdir , "VarFeatPlot.png"))
-  plot2
+  png(filename=paste0( outdir , "VarFeatPlot.png"))
+  print(plot2)
   dev.off()
 
-  plot2
+  print(plot2)
 
 
   return(data.object)
@@ -106,28 +106,28 @@ LinearAnalysis <- function (data.object,
   JSPlot <- JackStrawPlot(data.object, dims = 1:dims)
   elbow <- ElbowPlot(data.object)
 
-  png(paste0(outdir,"VizdimPlot4dimsPCA.png"))
-  vizdimplot
+  png(filename=paste0(outdir,"VizdimPlot4dimsPCA.png"))
+  print(vizdimplot)
   dev.off()
 
-  png(paste0(outdir,"DimplotPCA.png"))
-  dimplot
+  png(filename=paste0(outdir,"DimplotPCA.png"))
+  print(dimplot)
   dev.off()
 
-  png(paste0(outdir,"JackStrawPlot",dims,"dims.png"))
-  JSPlot
+  png(filename=paste0(outdir,"JackStrawPlot",dims,"dims.png"))
+  print(JSPlot)
   dev.off()
 
-  png(paste0(outdir,"ElbowPlotPCApng"))
-  elbow
+  png(filename=paste0(outdir,"ElbowPlotPCApng"))
+  print(elbow)
   dev.off()
 
-  heatm
+  print(heatm)
   par(ask=TRUE)
-  vizdimplot
-  dimplot
-  JSPlot
-  elbow
+  print(vizdimplot)
+  print(dimplot)
+  print(JSPlot)
+  print(elbow)
   par(ask=FALSE)
 
   return(data.object)
@@ -162,12 +162,12 @@ Cluser <-  function (data.object,
 
   }
 
-  png(paste0(outdir,"UMAPPlot_",str(dims),"dims_",str(UMAPres),"Res"))
-  UMAPplot
+  png(filename=paste0(outdir,"UMAPPlot_",str(dims),"dims_",str(UMAPres),"Res"))
+  print(UMAPplot)
   dev.off()
 
-  png(paste0(outdir,"tSNEplot_",str(dims),"dims_",str(tSNEREs),"Res"))
-  UMAPplot
+  png(filename=paste0(outdir,"tSNEplot_",str(dims),"dims_",str(tSNEREs),"Res"))
+  print(UMAPplot)
   dev.off()
 
 return(data.object)
