@@ -118,7 +118,7 @@ LinearAnalysis <- function (data.object,
   print(JSPlot)
   dev.off()
 
-  png(filename=paste0(outdir,"ElbowPlotPCApng"))
+  png(filename=paste0(outdir,"ElbowPlotPCA.png"))
   print(elbow)
   dev.off()
 
@@ -149,7 +149,7 @@ Cluser <-  function (data.object,
     UMAPplot <- DimPlot(data.object, reduction = "umap")
 
     data.object <- RunTSNE(data.object, dims = 1:dims)
-    tSNEPlot <- DimPlot(day16, reduction = "tsne")
+    tSNEPlot <- DimPlot(data.object, reduction = "tsne")
   }
   else{
     data.object <- FindClusters(data.object, resolution = UMAPres)
@@ -158,7 +158,7 @@ Cluser <-  function (data.object,
 
     data.object <- FindClusters(data.object, resolution = tSNEREs)
     data.object <- RunTSNE(data.object, dims = 1:dims)
-    tSNEPlot <- DimPlot(day16, reduction = "tsne")
+    tSNEPlot <- DimPlot(data.object, reduction = "tsne")
 
   }
 
