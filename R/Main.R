@@ -23,7 +23,7 @@ OpenData <- function(dir="data/",
                      min.feat=100,
                      outdir="output/"){
 
-  dir.create("./output", showWarnings = FALSE)
+  dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
   data <- Read10X(data.dir=dir)
 
@@ -47,10 +47,6 @@ OpenData <- function(dir="data/",
   print(plot3)
   dev.off()
 
-  par(mfrow=c(2,1))
-  print(Vplot)
-  print(plot3)
-  par(mfrow=c(1,1))
 
   return(data.object)
 }
@@ -59,6 +55,8 @@ OpenData <- function(dir="data/",
 NormalizeAndScale <- function(data.object,
                               nfeatures=500,
                               outdir="output/"){
+
+  dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
   data.object <- NormalizeData(data.object,
                                normalization.method = "LogNormalize",
@@ -80,20 +78,17 @@ NormalizeAndScale <- function(data.object,
   print(plot2)
   dev.off()
 
-  print(plot2)
-
-
   return(data.object)
 }
 
 
 
 LinearAnalysis <- function (data.object,
-                           dims=20,
-                           cells=1000,
-                           balance=TRUE,
-                           JackStrawReplicates=100,
-                           outdir="output/"){
+                            dims=20,
+                            cells=1000,
+                            balance=TRUE,
+                            JackStrawReplicates=100,
+                            outdir="output/"){
 
 
   data.object <- RunPCA(data.object, features = VariableFeatures(object = data.object))
@@ -122,24 +117,17 @@ LinearAnalysis <- function (data.object,
   print(elbow)
   dev.off()
 
-  print(heatm)
-  par(ask=TRUE)
-  print(vizdimplot)
-  print(dimplot)
-  print(JSPlot)
-  print(elbow)
-  par(ask=FALSE)
 
   return(data.object)
 }
 
 
-Cluser <-  function (data.object,
-                     dims=5,
-                     UMAPres=0.1,
-                     tSNEREs=0.1,
-                     outdir="output/"){
-
+Cluster <-  function (data.object,
+                      dims=5,
+                      UMAPres=0.1,
+                      tSNEREs=0.1,
+                      outdir="output/"){
+  dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
   data.object <- FindNeighbors(data.object,dims = 1:dims)
 
   if(UMAPres==tSNEREs){
@@ -162,15 +150,17 @@ Cluser <-  function (data.object,
 
   }
 
-  png(filename=paste0(outdir,"UMAPPlot_",str(dims),"dims_",str(UMAPres),"Res"))
+  png(filename=paste0(outdir,"UMAPPlot_",dims,"dims_",UMAPres,"Res.png"))
   print(UMAPplot)
   dev.off()
 
-  png(filename=paste0(outdir,"tSNEplot_",str(dims),"dims_",str(tSNEREs),"Res"))
-  print(UMAPplot)
+  png(filename=paste0(outdir,"tSNEplot_",dims,"dims_",tSNEREs,"Res.png"))
+  print(tSNEPlot)
   dev.off()
 
-return(data.object)
+
+
+  return(data.object)
 
 }
 
